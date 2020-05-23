@@ -70,6 +70,8 @@ class InstructionDecoder(implicit val conf:CAHPConfig) extends Module {
   }
   io.wbOut.regWrite.writeEnable := DecoderUtils.getRegWrite(io.inst)
   io.wbOut.regWrite.writeData := DontCare
+  io.wbOut.inst := DontCare
+  io.wbOut.instAddr := DontCare
 
   io.wbOut.finishFlag := (io.inst(15,0) === 0xE.U)
 }

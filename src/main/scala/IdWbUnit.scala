@@ -3,6 +3,8 @@ import chisel3.util.Cat
 
 class WbUnitIn(implicit val conf:CAHPConfig) extends Bundle {
   val regWrite = new MainRegInWrite()
+  val inst = UInt(24.W)
+  val instAddr = UInt(9.W)
   val finishFlag = Bool()
 }
 
@@ -53,12 +55,16 @@ class IdWbUnit(implicit val conf:CAHPConfig) extends Module {
   io.memOut := decoder.io.memOut
   io.memOut.data := fwd2.io.out
   io.wbOut := decoder.io.wbOut
+  io.wbOut.inst := pIdReg.inst
+  io.wbOut.instAddr := pIdReg.instAddr
   io.mainRegOut := mainReg.io.regOut
 
   decoder.io.inst := pIdReg.inst
 
   mainReg.io.port.inRead := decoder.io.regRead
   mainReg.io.port.inWrite := io.wbIn.regWrite
+  mainReg.io.inst := io.wbIn.inst
+  mainReg.io.instAddr := io.wbIn.instAddr
 
   fwd1.io.rs := decoder.io.regRead.rs1
   fwd1.io.data := mainReg.io.port.out.rs1Data
@@ -105,6 +111,8 @@ class IdWbUnit(implicit val conf:CAHPConfig) extends Module {
     io.memOut.write := false.B
     io.memOut.read := false.B
     io.wbOut.regWrite.writeEnable := false.B
+    io.wbOut.inst := 0.U
+    io.wbOut.instAddr := 0.U
     io.wbOut.finishFlag := false.B
     io.exOut.bcIn.pcOpcode := 0.U
   }

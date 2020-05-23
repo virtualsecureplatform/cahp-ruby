@@ -44,7 +44,7 @@ class BranchControllerIn(implicit val conf:CAHPConfig) extends Bundle {
 
 class ExUnitOut(implicit val conf:CAHPConfig) extends Bundle {
   val res = Output(UInt(16.W))
-  val jumpAddress = Output(UInt(conf.romAddrWidth.W))
+  val jumpAddress = Output(UInt(conf.instAddrWidth.W))
   val jump = Output(Bool())
 
   override def cloneType: this.type = new ExUnitOut()(conf).asInstanceOf[this.type]
@@ -114,4 +114,8 @@ class ExUnit(implicit val conf:CAHPConfig) extends Module {
     printf("[EX] Jump:%d\n", io.out.jump)
     printf("[EX] JumpAddress:0x%x\n", io.out.jumpAddress)
   }
+
+  //when(io.out.jump){
+  //  printf("JUMP addr:0x%x pcAdd:%d pc:0x%x pcImm:0x%x\n", io.out.jumpAddress, pExReg.bcIn.pcAdd, pExReg.bcIn.pc, pExReg.bcIn.pcImm)
+  //}
 }

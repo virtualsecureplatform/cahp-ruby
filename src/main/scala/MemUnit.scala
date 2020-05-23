@@ -77,7 +77,7 @@ class MemUnit(implicit val conf:CAHPConfig) extends Module {
       when(pExInReg.res(0) === 0.U){
         io.ramPort.writeData := Cat(io.ramPort.readData(15, 8), pMemReg.data(7, 0))
       }.otherwise{
-        io.ramPort.writeData := Cat(pMemReg.data(15, 8), io.ramPort.readData(7, 0))
+        io.ramPort.writeData := Cat(pMemReg.data(7, 0), io.ramPort.readData(7, 0))
       }
     }.otherwise{
       io.ramPort.writeData := pMemReg.data

@@ -29,7 +29,11 @@ class TestBinParser(filePath: String) {
   }
 
   for(i <- 0 to memSize-1) {
-    if (memData.contains(i)) {
+    if (i == 0x1FE/2) {
+      ramSeq = ramSeq :+ BigInt(0x1E8)
+    } else if (i == 0x1E8/2){
+      ramSeq = ramSeq :+ BigInt(0x1)
+    } else if (memData.contains(i)) {
       ramSeq = ramSeq :+ memData(i)
     } else {
       ramSeq = ramSeq :+ BigInt(0)

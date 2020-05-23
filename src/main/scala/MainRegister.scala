@@ -42,6 +42,9 @@ class MainRegPort(implicit val conf:CAHPConfig) extends Bundle {
 class MainRegisterPort(implicit val conf:CAHPConfig) extends Bundle {
   val port = new MainRegPort
   val regOut = new MainRegisterOutPort
+
+  val inst = Input(UInt(24.W))
+  val instAddr = Input(UInt(9.W))
 }
 
 class MainRegister(implicit val conf:CAHPConfig) extends Module{
@@ -51,11 +54,15 @@ class MainRegister(implicit val conf:CAHPConfig) extends Module{
 
   io.port.out.rs1Data := MainReg(io.port.inRead.rs1)
   io.port.out.rs2Data := MainReg(io.port.inRead.rs2)
-  when(io.port.inWrite.writeEnable){
+  when(io.port.inWrite.writeEnable) {
     MainReg(io.port.inWrite.rd) := io.port.inWrite.writeData
-    when(conf.debugWb.B){
-      printf("portA Reg x%d <= 0x%x\n", io.port.inWrite.rd, io.port.inWrite.writeData)
+    when(conf.debugWb.B) {
+      printf("inst:0x%x addr:0x%x portA Reg x%d <= 0x%x\n", io.inst, io.instAddr, io.port.inWrite.rd, io.port.inWrite.writeData)
     }
+  }.otherwise{
+    //when(conf.debugWb.B){
+    //  printf("inst:0x%x addr:0x%x\n", io.inst, io.instAddr)
+    //}
   }
 
   io.regOut.x0 := MainReg(0)
