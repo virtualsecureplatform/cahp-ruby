@@ -1,0 +1,16 @@
+*~
+*.#*
+.idea
+project/project
+project/target
+target
+test_run_dir
+*.anno
+*.fir
+*.v
+.attach*
+.~lock*
+utils/test*
+utils/gen.sh
+utils/cpu-dump
+utils/sim-dump
