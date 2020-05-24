@@ -113,12 +113,9 @@ class IfUnit(implicit val conf: CAHPConfig) extends Module {
     romCacheState := romCacheState
   }
 
-  when(io.in.jump){
     stole := false.B
     io.out.romAddr := pc(8, 2)
-  }.otherwise{
     when(romCacheState === romCacheStateType.NotLoaded){
-      io.out.romAddr := pc(8, 2)
       inst := getInst(pc, io.in.romData, io.in.romData)
       when(isLong){
         when(pc(1) === 1.U) {
@@ -142,7 +139,6 @@ class IfUnit(implicit val conf: CAHPConfig) extends Module {
       inst := getInst(pc, io.in.romData, romCache)
       stole := false.B
     }
-  }
 
   io.out.instAddr := pc
   io.out.stole := stole
