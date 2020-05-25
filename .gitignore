@@ -14,3 +14,4 @@ utils/test*
 utils/gen.sh
 utils/cpu-dump
 utils/sim-dump
+ram-16bit.json
