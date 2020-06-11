@@ -1,23 +1,20 @@
-# read design 
+# read design
 read_verilog VSPCore.v
 
 # elaborate design hierarchy
 hierarchy -check -top VSPCore
 
-# the high-level stuff
-proc; opt; fsm; opt; memory; opt
+proc; flatten
 
-# mapping to internal cell library
-techmap; opt
-
-#To make easy to parse for V2TT
-flatten;
+synth
 
 # mapping logic to gates.
 abc -g gates,MUX
 
 # cleanup
 clean -purge
+
+stat
 
 # write synthesized design
 write_json vsp-core-ruby.json
