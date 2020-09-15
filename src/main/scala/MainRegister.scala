@@ -44,7 +44,7 @@ class MainRegisterPort(implicit val conf:CAHPConfig) extends Bundle {
   val regOut = new MainRegisterOutPort
 
   val inst = Input(UInt(24.W))
-  val instAddr = Input(UInt(9.W))
+  val instAddr = Input(UInt(conf.instAddrWidth.W))
 }
 
 class MainRegister(implicit val conf:CAHPConfig) extends Module{

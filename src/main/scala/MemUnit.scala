@@ -35,7 +35,7 @@ class MemUnit(implicit val conf:CAHPConfig) extends Module {
   }
 
   io.out := pWbReg
-  io.ramPort.addr := pExInReg.res(8,1)
+  io.ramPort.addr := pExInReg.res(conf.dataAddrWidth-1,1)
   io.ramPort.writeData := DontCare
   io.ramPort.writeEnable := false.B
 

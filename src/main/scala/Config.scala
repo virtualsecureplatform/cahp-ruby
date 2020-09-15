@@ -10,13 +10,14 @@ case class CAHPConfig() {
   var testRam:Seq[BigInt] = Seq(BigInt(0))
 
   //IF Unit
-  val instAddrWidth = 9
-  val instDataWidth = 24
-
   val romAddrWidth = 7
   val romDataWidth = 32
 
-  val dataAddrWidth = 9
+  val instAddrWidth = romAddrWidth+2
+  val instDataWidth = 24
+
   val ramAddrWidth = 8
   val ramDataWidth = 16
+
+  val dataAddrWidth = ramAddrWidth+1
 }

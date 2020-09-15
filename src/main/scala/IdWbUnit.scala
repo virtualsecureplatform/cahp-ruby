@@ -4,8 +4,10 @@ import chisel3.util.Cat
 class WbUnitIn(implicit val conf:CAHPConfig) extends Bundle {
   val regWrite = new MainRegInWrite()
   val inst = UInt(24.W)
-  val instAddr = UInt(9.W)
+  val instAddr = UInt(conf.instAddrWidth.W)
   val finishFlag = Bool()
+
+  override def cloneType: this.type = new WbUnitIn()(conf).asInstanceOf[this.type]
 }
 
 class IdWbUnitPort(implicit val conf:CAHPConfig) extends Bundle {
