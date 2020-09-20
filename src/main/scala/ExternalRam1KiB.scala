@@ -1,6 +1,7 @@
 import chisel3._
 
 class ExternalRam1KiB(implicit val conf:CAHPConfig) extends Module {
+  conf.ramAddrWidth = 9
   val io = IO(new Bundle {
     val port = Flipped(new RamPort)
     val debug = Output(Vec(512,UInt(16.W)))

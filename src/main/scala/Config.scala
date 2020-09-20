@@ -16,7 +16,7 @@ case class CAHPConfig() {
   val instAddrWidth = romAddrWidth+2
   val instDataWidth = 24
 
-  val ramAddrWidth = 8
+  var ramAddrWidth = 8
   val ramDataWidth = 16
 
   val dataAddrWidth = ramAddrWidth+1
