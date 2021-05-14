@@ -35,6 +35,8 @@ class CoreUnitSpec() extends ChiselFlatSpec {
     if(f.getName().contains(".bin")) {
       println(f.getName())
       val parser = new TestBinParser(f.getAbsolutePath())
+      println(parser.romSeq)
+      println(parser.ramSeq)
 
       conf.testRom = parser.romSeq
       conf.testRam = parser.ramSeq
@@ -53,19 +55,6 @@ class CoreUnitSpec() extends ChiselFlatSpec {
               for (i <- 0 until cycle) {
                 step(1)
                 if(peek(c.io.finishFlag) == 1){
-
-                  //Check finishFlag is persistent
-                  step(1)
-                  expect(c.io.finishFlag, 1)
-                  step(1)
-                  expect(c.io.finishFlag, 1)
-                  step(1)
-                  expect(c.io.finishFlag, 1)
-                  step(1)
-                  expect(c.io.finishFlag, 1)
-                  step(1)
-                  expect(c.io.finishFlag, 1)
-
                   printf("CYCLE:%d\n", i);
                   b.break;
                 }
