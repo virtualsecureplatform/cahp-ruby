@@ -35,8 +35,6 @@ class CoreUnitSpec() extends ChiselFlatSpec {
     if(f.getName().contains(".bin")) {
       println(f.getName())
       val parser = new TestBinParser(f.getAbsolutePath())
-      println(parser.romSeq)
-      println(parser.ramSeq)
 
       conf.testRom = parser.romSeq
       conf.testRam = parser.ramSeq

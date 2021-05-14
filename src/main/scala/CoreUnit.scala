@@ -18,8 +18,15 @@ class CoreUnit(implicit val conf:CAHPConfig) extends Module {
   val exUnit = Module(new ExUnit)
   val memUnit = Module(new MemUnit)
 
+  val finishFlagReg = RegInit(false.B)
+  finishFlagReg := finishFlagReg
+  when(memUnit.io.out.finishFlag) {
+    finishFlagReg := memUnit.io.out.finishFlag
+  }
+  io.finishFlag := finishFlagReg
+
+
   io.testRegx8 := idwbUnit.io.mainRegOut.x8
-  io.finishFlag := memUnit.io.out.finishFlag
   io.romPort.addr := ifUnit.io.out.romAddr
   io.mainRegOut := idwbUnit.io.mainRegOut
   ifUnit.io.in.romData := io.romPort.data
