@@ -10,14 +10,23 @@ class ExternalTestRam1(implicit val conf:CAHPConfig) extends Module {
 
   val loadAddr = RegInit(0.U(8.W))
   val ram = VecInit(conf.testRam map (x=> x.U(conf.ramDataWidth.W)))
+
+  val regWriteEnable = RegInit(false.B)
+  val regWriteAddr = RegInit(0.U(conf.ramAddrWidth.W))
+  val regWriteData = RegInit(0.U(conf.ramDataWidth.W))
+
+  regWriteEnable := io.port.writeEnable
+  regWriteAddr := io.port.addr
+  regWriteData := io.port.writeData
+
   when(io.load){
     mem(loadAddr) := ram(loadAddr)
     loadAddr := loadAddr + 1.U
   }.otherwise {
-    when(io.port.writeEnable) {
-      mem(io.port.addr) := io.port.writeData
+    when(regWriteEnable) {
+      mem(regWriteAddr) := regWriteData
       when(conf.debugMem.B) {
-        printf("[MEM] MemWrite Mem[0x%x] <= Data:0x%x\n", io.port.addr, io.port.writeData)
+        printf("[MEM] MemWrite Mem[0x%x] <= Data:0x%x\n", regWriteAddr, regWriteData)
       }
     }
   }
