@@ -23,7 +23,7 @@ class CoreUnit(implicit val conf:CAHPConfig) extends Module {
   when(memUnit.io.out.finishFlag) {
     finishFlagReg := memUnit.io.out.finishFlag
   }
-  io.finishFlag := finishFlagReg
+  io.finishFlag := finishFlagReg | memUnit.io.out.finishFlag
 
 
   io.testRegx8 := idwbUnit.io.mainRegOut.x8
