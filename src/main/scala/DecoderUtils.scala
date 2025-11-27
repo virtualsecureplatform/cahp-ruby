@@ -31,7 +31,7 @@ object DecoderUtils {
     val regWrite = Wire(Bool())
 
     when(inst(2,1) === InstructionCategory.InstM){
-      regWrite := inst(3) != 1.U
+      regWrite := inst(3) =/= 1.U
     }.elsewhen(inst(2,1) === InstructionCategory.InstJ) {
       regWrite := (inst(4) === 1.U) && (inst(0) === 0.U)
     }.elsewhen(inst(7,0) === 0.U){
@@ -175,7 +175,7 @@ object DecoderUtils {
     memRead := false.B
     when(inst(2, 1) === InstructionCategory.InstM){
       when(inst(3) === 0.U){
-        when(inst(5, 0) != "b110101".U(6.W) && inst(5, 0) != "b110100".U(6.W) && inst(5, 0) != "b100".U(6.W)){
+        when(inst(5, 0) =/= "b110101".U(6.W) && inst(5, 0) =/= "b110100".U(6.W) && inst(5, 0) =/= "b100".U(6.W)){
           memRead := true.B
         }
       }

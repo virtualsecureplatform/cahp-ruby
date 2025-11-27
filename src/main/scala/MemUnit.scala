@@ -7,8 +7,6 @@ class MemUnitIn(implicit val conf:CAHPConfig) extends Bundle {
   val signExt = Bool()
   val read = Bool()
   val write = Bool()
-
-  override def cloneType: this.type = new MemUnitIn()(conf).asInstanceOf[this.type]
 }
 
 class MemUnitPort(implicit val conf:CAHPConfig) extends Bundle {

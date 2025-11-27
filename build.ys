@@ -19,5 +19,7 @@ abc -g gates,MUX
 # cleanup
 clean -purge
 
+# dfflegalize -cell $_DFF_P_ 01
+
 # write synthesized design
 write_json vsp-core-ruby.json

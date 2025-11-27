@@ -2,15 +2,15 @@ import chisel3._
 import chisel3.util.BitPat
 
 object ALUOpcode {
-  def ADD = BitPat("b0000")
-  def SUB = BitPat("b0001")
-  def AND = BitPat("b0010")
-  def XOR = BitPat("b0011")
-  def OR  = BitPat("b0100")
-  def LSL = BitPat("b0101")
-  def LSR = BitPat("b0110")
-  def ASR = BitPat("b0111")
-  def MOV = BitPat("b1000")
+  def ADD = "b0000".U(4.W)
+  def SUB = "b0001".U(4.W)
+  def AND = "b0010".U(4.W)
+  def XOR = "b0011".U(4.W)
+  def OR  = "b0100".U(4.W)
+  def LSL = "b0101".U(4.W)
+  def LSR = "b0110".U(4.W)
+  def ASR = "b0111".U(4.W)
+  def MOV = "b1000".U(4.W)
 }
 
 class ALUPortIn(implicit val conf:CAHPConfig) extends Bundle {
@@ -54,7 +54,7 @@ class ALU(implicit val conf:CAHPConfig) extends Module {
   val resCarry = Wire(UInt(17.W))
   val inB_sub = Wire(UInt(16.W))
   resCarry := DontCare
-  inB_sub := (~io.in.inB).asUInt()+1.U
+  inB_sub := (~io.in.inB).asUInt + 1.U
 
   when(io.in.opcode === ALUOpcode.ADD) {
     io.out.out := io.in.inA + io.in.inB
@@ -68,11 +68,11 @@ class ALU(implicit val conf:CAHPConfig) extends Module {
   }.elsewhen(io.in.opcode === ALUOpcode.XOR) {
     io.out.out := io.in.inA ^ io.in.inB
   }.elsewhen(io.in.opcode === ALUOpcode.LSL) {
-    io.out.out := (io.in.inA << io.in.inB).asUInt()
+    io.out.out := (io.in.inA << io.in.inB).asUInt
   }.elsewhen(io.in.opcode === ALUOpcode.LSR) {
-    io.out.out := (io.in.inA >> io.in.inB).asUInt()
+    io.out.out := (io.in.inA >> io.in.inB).asUInt
   }.elsewhen(io.in.opcode === ALUOpcode.ASR) {
-    io.out.out := (io.in.inA.asSInt() >> io.in.inB).asUInt()
+    io.out.out := (io.in.inA.asSInt >> io.in.inB).asUInt
   }.elsewhen(io.in.opcode === ALUOpcode.MOV) {
     io.out.out := io.in.inB
   }.otherwise {

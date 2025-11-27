@@ -6,16 +6,12 @@ class RamPort(implicit val conf:CAHPConfig) extends Bundle {
   val addr = Output(UInt(conf.ramAddrWidth.W))
   val writeData = Output(UInt(conf.ramDataWidth.W))
   val writeEnable = Output(Bool())
-
-  override def cloneType: this.type = new RamPort()(conf).asInstanceOf[this.type]
 }
 
 class RomPort(implicit val conf:CAHPConfig) extends Bundle {
   val data = Input(UInt(conf.romDataWidth.W))
 
   val addr = Output(UInt(conf.romAddrWidth.W))
-
-  override def cloneType: this.type = new RomPort()(conf).asInstanceOf[this.type]
 }
 
 class MainRegisterOutPort(implicit val conf:CAHPConfig) extends Bundle{
