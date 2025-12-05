@@ -16,7 +16,10 @@ flatten;
 # mapping logic to gates.
 abc -g gates,MUX
 
+dfflegalize -cell $_DFF_P_ 01
+
 # cleanup
+opt_expr; opt_clean
 clean -purge
 
 # write synthesized design
