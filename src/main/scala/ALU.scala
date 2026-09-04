@@ -1,5 +1,5 @@
 import chisel3._
-import chisel3.util.BitPat
+import chisel3.util.{BitPat, Cat}
 
 object ALUOpcode {
   def ADD = "b0000".U(4.W)
@@ -34,32 +34,17 @@ class ALUPort(implicit val conf:CAHPConfig) extends Bundle{
 
 class ALU(implicit val conf:CAHPConfig) extends Module {
 
-  def check_overflow(s1: UInt, s2: UInt, r: UInt) = {
-    val s1_sign = Wire(UInt(1.W))
-    val s2_sign = Wire(UInt(1.W))
-    val res_sign = Wire(UInt(1.W))
-    val res = Wire(Bool())
-    s1_sign := s1(15)
-    s2_sign := s2(15)
-    res_sign := r(15)
-    when(((s1_sign ^ s2_sign) === 0.U) && ((s2_sign ^ res_sign) === 1.U)) {
-      res := true.B
-    }.otherwise {
-      res := false.B
-    }
-    res
-  }
-
   val io = IO(new ALUPort)
   val resCarry = Wire(UInt(17.W))
-  val inB_sub = Wire(UInt(16.W))
   resCarry := DontCare
-  inB_sub := (~io.in.inB).asUInt + 1.U
 
   when(io.in.opcode === ALUOpcode.ADD) {
     io.out.out := io.in.inA + io.in.inB
   }.elsewhen(io.in.opcode === ALUOpcode.SUB) {
-    resCarry := io.in.inA +& inB_sub
+    // Keep the carry from A + ~B + 1.  Negating B at 16 bits first loses
+    // that carry when B is zero and makes unsigned comparisons incorrect.
+    resCarry := Cat(0.U(1.W), io.in.inA) +
+      Cat(0.U(1.W), (~io.in.inB).asUInt) + 1.U
     io.out.out := resCarry(15, 0)
   }.elsewhen(io.in.opcode === ALUOpcode.AND) {
     io.out.out := io.in.inA & io.in.inB
@@ -82,5 +67,6 @@ class ALU(implicit val conf:CAHPConfig) extends Module {
   io.out.flagCarry := ~resCarry(16)
   io.out.flagSign := io.out.out(15)
   io.out.flagZero := (io.out.out === 0.U(16.W))
-  io.out.flagOverflow := check_overflow(io.in.inA, inB_sub, io.out.out)
+  io.out.flagOverflow := (io.in.inA(15) =/= io.in.inB(15)) &&
+    (io.out.out(15) =/= io.in.inA(15))
 }
